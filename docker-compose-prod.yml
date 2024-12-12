@@ -25,7 +25,7 @@ services:
 
   mysql-s:
     image: 'mysql/mysql-server:8.0'
-    container_name: egift_mysql
+    container_name: egift_mysql_s
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
@@ -40,7 +40,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  mysql-data-dir:
+  mysql-data:
     driver: local
 
 networks:
