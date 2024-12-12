@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+    then
+        echo "Error. Please make sure you've indicated correct parameters";
+elif [ $1 == "prod" ]
+    then
+       if [ $2 == "go" ]
+            then
+                echo "Running prod deploy"
+                rsync -azv --no-perms --no-owner --no-group --force --delete --progress --exclude-from=rsync_exclude.txt -e "ssh" ./ df:/var/www/gorcer.com/egift
+                ssh df 'cd /var/www/gorcer.com/egift && mv -f docker-compose-prod.yml docker-compose.yml'
+                ssh df 'docker exec egift_app php artisan migrate'
+                ssh df 'docker exec egift_app php artisan config:cache'
+                ssh df 'docker exec egift_app php artisan cache:clear'
+        fi
+
+fi

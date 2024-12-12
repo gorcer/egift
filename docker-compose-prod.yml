@@ -1,0 +1,48 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: egift_app
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - egift_net
+    restart: unless-stopped
+    environment:
+      APP_ENV: ${APP_ENV}
+      APP_KEY: ${APP_KEY}
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    expose:
+      - "9000" # PHP-FPM порт для Nginx
+    ports:
+      - "127.0.0.1:${FORWARD_PHP_PORT:-9000}:9000"
+
+  mysql-s:
+    image: 'mysql/mysql-server:8.0'
+    container_name: egift_mysql
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+#    ports:
+#      - '${FORWARD_DB_PORT:-3306}:3306'
+    networks:
+      - egift_net
+    restart: unless-stopped
+
+volumes:
+  mysql-data-dir:
+    driver: local
+
+networks:
+  egift_net:
+    driver: bridge
