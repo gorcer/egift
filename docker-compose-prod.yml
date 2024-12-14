@@ -23,7 +23,7 @@ services:
     ports:
       - "127.0.0.1:${FORWARD_PHP_PORT:-9000}:9000"
 
-  mysql-s:
+  mysql:
     image: 'mysql/mysql-server:8.0'
     container_name: egift_mysql_s
     volumes:

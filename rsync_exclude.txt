@@ -42,7 +42,6 @@ texts
 storage
 hot
 node_modules
-public/build
 bootstrap/cache
 bootstrap/cache/config.php
 vendor

@@ -43,6 +43,7 @@ class CreateCertificateCommand extends Command
             $this->info('Certificate ID: ' . $certificate->id);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
+            $this->error($e->getTraceAsString());
             return Command::FAILURE;
         }
 
