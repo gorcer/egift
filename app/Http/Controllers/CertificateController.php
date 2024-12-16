@@ -3,11 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Services\TelegramService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\Certificate;
 
 class CertificateController extends Controller
 {
+    public function print(string $code) {
+        $certificate = Certificate::where('code', $code)->first();
+
+        if (!$certificate) {
+            abort(404, 'Сертификат не найден.');
+        }
+
+        $data = [
+            'title' => 'Электроподарочная',
+            'description' => $certificate->product->description,
+            'qr_code_url' => url('/cert/' . $certificate->code),
+            'activation_code' => $certificate->activation_code,
+        ];
+
+        return view('certificates.template', $data);
+//        $pdf = Pdf::loadView('certificates.template', $data);
+  //      $pdf->setPaper('A4', 'portrait');
+
+    //    return $pdf->download('print.pdf');
+    }
     /**
      * Show the certificate activation form.
      *

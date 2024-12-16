@@ -43,10 +43,10 @@ class CertificateService
         ]);
 
         // Generate PDF
-        $pdf = $this->generatePdf($certificate);
+//        $pdf = $this->generatePdf($certificate);
 
         // Send email with the PDF
-        $this->sendEmailWithPdf($email, $certificate, $pdf);
+//        $this->sendEmailWithPdf($email, $certificate, $pdf);
 
         return $certificate;
     }
@@ -60,8 +60,8 @@ class CertificateService
     protected function generatePdf(Certificate $certificate): string
     {
         $data = [
-            'title' => 'Your Certificate',
-            "description" => 'Description',
+            'title' => 'Электроподарочная',
+            "description" => $certificate->product->description,
             'qr_code_url' => url('/cert/' . $certificate->code),
             'activation_code' => $certificate->activation_code,
         ];
@@ -89,6 +89,16 @@ class CertificateService
                 ->attachData($pdfContent, 'certificate.pdf', [
                     'mime' => 'application/pdf',
                 ]);
+        });
+    }
+
+    public function sendEmailWithCertificateLink(string $email, Certificate $certificate): void
+    {
+        Mail::send([], [], function (Message $message) use ($email, $certificate) {
+            $link = route('cert.print', ['code'=>$certificate->code]);
+            $message->to($email)
+                ->subject('Your Certificate')
+                ->html('<p>Для получения сертификата пройдите по ссылке <a href="'.$link.'">'.$link.'</a></p>');
         });
     }
 }

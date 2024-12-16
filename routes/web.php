@@ -19,6 +19,8 @@ Route::get('/cert/{code}/mail-code', [CertificateController::class, 'enterMailCo
 Route::post('/cert/{code}/mail-code', [CertificateController::class, 'submitMailCode'])->name('cert.submit_mail_code');
 Route::get('/cert/{code}/done', [CertificateController::class, 'done'])->name('cert.done');
 
+Route::get('/cert/{code}/print', [CertificateController::class, 'print'])->name('cert.print');
+
 Route::get('/test-pdf', function () {
     $pdf = Pdf::loadHTML('<h1>Test PDF</h1>');
     return $pdf->download('test.pdf');

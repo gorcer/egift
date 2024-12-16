@@ -38,6 +38,7 @@ class CreateCertificateCommand extends Command
 
         try {
             $certificate = $certificateService->createCertificate($productAlias, $email);
+            $certificateService->sendEmailWithCertificateLink($email, $certificate);
 
             $this->info('Certificate created successfully!');
             $this->info('Certificate ID: ' . $certificate->id);

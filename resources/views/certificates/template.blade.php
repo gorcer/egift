@@ -6,25 +6,22 @@
     <title>Certificate</title>
     <style>
         @font-face {
-            font-family: 'DejaVu Sans';
-            src: url('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/fonts/DejaVuSans.ttf') format('truetype');
+            font-family: 'Roboto Mono';
+            src: url('https://fonts.gstatic.com/s/robotomono/v11/L0x5DF4xlVMF-BfR8bXMIjC4mVfeWg.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
+
+
 
         body {
             font-family: 'DejaVu Sans', Arial, sans-serif;
             margin: 0;
             padding: 0;
-        }
-
-        .container {
-            /*width: 210mm;*/
-            /*height: 267mm; !* Формат A4 *!*/
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            padding: 5mm; /* Уменьшенные отступы */
+            height: 297mm; /* Высота A4 */
+            width: 210mm; /* Ширина A4 */
             box-sizing: border-box;
         }
 
@@ -39,60 +36,74 @@
         }
 
         .section:not(:last-child) {
-            border-bottom: 1px dashed #000; /* Уменьшенная толщина пунктирной линии */
+            border-bottom: 2px dashed #000; /* Разделяющая пунктирная линия */
         }
 
         h1 {
-            font-size: 18px; /* Уменьшенный размер заголовка */
+            font-size: 36px;
+            font-weight: bold;
             margin: 0;
-        }
-
-        p {
-            font-size: 12px; /* Уменьшенный размер текста */
-            margin: 4px 0;
-            line-height: 1.3;
         }
 
         .qr-section {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 5mm; /* Уменьшенный промежуток */
+            width: 100%;
+            padding: 0 10mm; /* Отступы слева и справа */
+            box-sizing: border-box;
         }
 
         .qr-code {
-            width: 80px; /* Уменьшенные размеры QR-кода */
-            height: 80px;
+            width: 300px; /* Размеры QR-кода */
+            height: 300px;
         }
 
         .qr-text {
-            font-size: 12px;
+            font-size: 14px;
             text-align: left;
+            flex: 1;
+            margin-left: 10mm;
+        }
+
+        .bottom-text {
+            font-size: 16px;
+            text-align: left;
+            padding: 0 10mm;
+            line-height: 1.5;
+        }
+
+        strong {
+            font-size: 20px; /* Размер кода активации */
+            display: block;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Первая часть -->
-    <div class="section">
-        <h1>{{ $title }}</h1>
-        <p>{{ $description }}</p>
-    </div>
+<!-- Первая часть -->
+<div class="section">
+    <h1>{{ $title }}</h1>
+</div>
 
-    <!-- Вторая часть -->
-    <div class="section">
-        <div class="qr-section">
-            <img class="qr-code" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(80)->generate($qr_code_url)) !!}" alt="QR Code">
-            <div class="qr-text">
-                <p>Наведите камеру на QR-код, чтобы отсканировать его.</p>
-                <p>Перейдите по ссылке и введите код активации:</p>
-                <p><strong>{{ $activation_code }}</strong></p>
-            </div>
+<!-- Вторая часть -->
+<div class="section">
+    <div class="qr-section">
+        <img class="qr-code" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(300)->generate($qr_code_url)) !!}" alt="QR Code">
+        <div class="qr-text">
+            <p>Данный сертификат дает право на получение:</p>
+            <p><strong>{{ $description }}</strong></p>
+            Код активации: <strong>{{ $activation_code }}</strong>
         </div>
     </div>
+</div>
 
-    <!-- Третья часть -->
-    <div class="section"></div>
+<!-- Третья часть -->
+<div class="section">
+    <div class="bottom-text">
+        <p>Наведите камеру на QR-код, чтобы отсканировать его.</p>
+        <p>Перейдите по ссылке и введите код активации.</p>
+    </div>
 </div>
 </body>
 </html>
